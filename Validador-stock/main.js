@@ -7,25 +7,51 @@ const cantidadProductos = parseInt(cantidadProductosTexto);
 
 let productosBajos = 0;
 
-for (let i = 1; i <= cantidadProductos; i++) {
-  const nombreProducto = prompt(`Producto ${i}: ingresá el nombre`);
-  const stockTexto = prompt(`¿Cuántas unidades de "${nombreProducto}" hay en stock?`);
+function pedirDatosProducto(numero) {
+  const nombre = prompt(`Producto ${numero}: ingresá el nombre`);
+  const stockTexto = prompt(`¿Cuántas unidades de "${nombre}" hay en stock?`);
   const stock = parseInt(stockTexto);
+  return { nombre, stock };
+}
 
-  if (stock < MINIMO_STOCK) {
-    console.log(`⚠️ ${nombreProducto}: stock bajo (${stock} unidades). Necesita reposición.`);
-    productosBajos++;
-  } else if (stock === MINIMO_STOCK) {
-    console.log(`🔶 ${nombreProducto}: stock justo en el mínimo (${stock} unidades).`);
+function evaluarEstadoStock(stock, minimo) {
+  if (stock < minimo) {
+     return "bajo";
+  } else if (stock === minimo) {
+     return "limite";
+  }  else {
+     return "ok";
+  } 
+} 
+
+  const mostrarResultadoProducto = function (nombre, estado, stock) {
+  if (estado === "bajo") {
+    console.log(`⚠️ ${nombre}: stock bajo (${stock} unidades). Necesita reposición.`);
+  } else if (estado === "limite") {
+    console.log(`🔶 ${nombre}: stock justo en el mínimo (${stock} unidades).`);
   } else {
-    console.log(`✅ ${nombreProducto}: stock OK (${stock} unidades).`);
+    console.log(`✅ ${nombre}: stock OK (${stock} unidades).`);
+  }
+};
+
+const mostrarResumenFinal = (bajos) => {
+  if (bajos > 0) {
+    console.log(`Resumen: ${bajos} producto(s) necesitan reposición.`);
+    alert(`⚠️ Atención: ${bajos} producto(s) necesitan reposición.`);
+  } else {
+    console.log("Resumen: todo el inventario está en buen estado.");
+    alert("✅ Todo el inventario está en buen estado.");
+  }
+};
+
+for (let i = 1; i <= cantidadProductos; i++) {
+  const datosProducto = pedirDatosProducto(i);
+  const estado = evaluarEstadoStock(datosProducto.stock, MINIMO_STOCK);
+  mostrarResultadoProducto(datosProducto.nombre, estado, datosProducto.stock);
+
+  if (estado === "bajo") {
+    productosBajos++;
   }
 }
 
-if (productosBajos > 0) {
-  console.log(`Resumen: ${productosBajos} producto(s) necesitan reposición.`);
-  alert(`⚠️ Atención: ${productosBajos} producto(s) necesitan reposición.`);
-} else {
-  console.log("Resumen: todo el inventario está en buen estado.");
-  alert("✅ Todo el inventario está en buen estado.");
-}
+mostrarResumenFinal(productosBajos);
