@@ -1,3 +1,4 @@
+
 const MINIMO_STOCK = 5;
 
 const cantidadProductosTexto = prompt(
@@ -55,3 +56,33 @@ for (let i = 1; i <= cantidadProductos; i++) {
 }
 
 mostrarResumenFinal(productosBajos);
+
+const productosEnStock = ["Yerba", "Arroz", "Fideos", "Aceite", "Jabón"];
+
+productosEnStock.push("Cafe");
+productosEnStock.unshift("Agua mineral");
+
+const eliminado = productosEnStock.pop();
+console.log(`Se ha eliminado el elemento: ${eliminado}`);
+
+const buscado = prompt("¿Qué producto querés buscar en el stock?");
+
+if (productosEnStock.includes(buscado)) {
+  const posicion = productosEnStock.indexOf(buscado);
+  console.log(`✅ "${buscado}" está en stock, en la posición ${posicion}`);
+} else {
+  console.log(`❌ "${buscado}" no está en stock`);
+}
+
+productosEnStock.splice(2, 1, "Fideos integrales");
+console.log(`El producto de la posición 2 ahora es: ${productosEnStock[2]}`);
+
+function listarStock(lista) {
+  console.log("--- Stock actual ---");
+  for (const producto of lista) {
+    console.log(`Producto: ${producto}`);
+  }
+  console.log(`Total: ${lista.length} productos`);
+}
+
+listarStock(productosEnStock);
